@@ -1,5 +1,7 @@
 jar.enabled = true
 
 dependencies {
+    // common 모듈에 있는 ApiException 을 끌어다 쓰기 위해
+    implementation project(':common')
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 }
