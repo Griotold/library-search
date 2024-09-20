@@ -8,7 +8,7 @@ import org.springframework.test.context.ActiveProfiles
 import spock.lang.Ignore
 import spock.lang.Specification
 
-@Ignore         // total 값이 항상 32일 수 없다.
+@Ignore
 @SpringBootTest(classes = NaverClientIntegrationTest.TestConfig.class)
 @ActiveProfiles("test")
 class NaverClientIntegrationTest extends Specification {
@@ -26,6 +26,6 @@ class NaverClientIntegrationTest extends Specification {
         def response = naverClient.search("HTTP", 1, 10)
 
         then:
-        response.total == 32
+        response.total == 31
     }
 }
