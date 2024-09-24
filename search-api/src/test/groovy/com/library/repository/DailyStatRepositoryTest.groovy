@@ -48,4 +48,29 @@ class DailyStatRepositoryTest extends Specification {
             result.get().query == givenQuery
         }
     }
+
+    def "쿼리의 카운트를 조회한다."() {
+        given:
+        def givenQuery = "HTTP"
+        def now = LocalDateTime.of(2024, 5, 2, 0, 0, 0)
+        // 검색될 레코드들
+        def stat1 = new DailyStat(givenQuery, now.plusMinutes(10))
+        def stat2 = new DailyStat(givenQuery, now.plusMinutes(20))
+
+        // 검색되지 않아야할 레코드들
+        def stat3 = new DailyStat(givenQuery, now.minusMinutes(1))
+        def stat4 = new DailyStat("JAVA", now.plusMinutes(10))
+
+        // dailyStatRepository.saveAll([stat1, stat2, stat3, stat4])
+        def stats = [stat1, stat2, stat3, stat4]
+        // groovy 에서는 메소드 호출시 괄호가 필요 없다고 함.
+        // 따라서 "dailyStatRepository.saveAll stats" 도 가능함.
+        dailyStatRepository.saveAll(stats)
+
+        when: "오늘부터 내일까지 검색된 게 몇개인지 조회"
+        def result = dailyStatRepository.countByQueryAndEventDateTimeBetween(givenQuery, now, now.plusDays(1))
+
+        then: "2개가 나와야 한다."
+        result == 2
+    }
 }
