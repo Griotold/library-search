@@ -1,11 +1,13 @@
 package com.library.repository
 
+
 import com.library.entity.DailyStat
 import com.library.feign.NaverClient
 import jakarta.persistence.EntityManager
 import org.spockframework.spring.SpringBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.data.domain.PageRequest
 import org.springframework.test.context.ActiveProfiles
 import spock.lang.Specification
 
@@ -72,5 +74,39 @@ class DailyStatRepositoryTest extends Specification {
 
         then: "2개가 나와야 한다."
         result == 2
+    }
+
+    def "가장 많이 검색된 쿼리 키워드를 개수와 함께 상위 3개 반환한다."() {
+        given:
+        def now = LocalDateTime.now()
+        def stat1 = new DailyStat('HTTP', now.plusMinutes(10))
+        def stat2 = new DailyStat('HTTP', now.plusMinutes(10))
+        def stat3 = new DailyStat('HTTP', now.plusMinutes(10))
+        def stat4 = new DailyStat('JAVA', now.plusMinutes(10))
+        def stat5 = new DailyStat('JAVA', now.plusMinutes(10))
+        def stat6 = new DailyStat('JAVA', now.plusMinutes(10))
+        def stat7 = new DailyStat('JAVA', now.plusMinutes(10))
+        def stat8 = new DailyStat('SPRING', now.plusMinutes(10))
+        def stat9 = new DailyStat('SPRING', now.plusMinutes(10))
+        def stat10 = new DailyStat('OS', now.plusMinutes(10))
+
+        dailyStatRepository.saveAll([stat1, stat2, stat3, stat4, stat5, stat6, stat7, stat8, stat9, stat10])
+
+        when:
+        def request = PageRequest.of(0, 3)
+        def response = dailyStatRepository.findTopQuery(request)
+
+        then:
+        verifyAll {
+            response.size() == 3
+            // query, query() 모두 가능 -> 둘 다 getter 호출
+            response[0].query == 'JAVA'
+            response[0].count() == 4
+            response[1].query() == 'HTTP'
+            response[1].count() == 3
+            response[2].query() == 'SPRING'
+            response[2].count() == 2
+        }
+
     }
 }
