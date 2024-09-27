@@ -6,12 +6,12 @@ import com.library.controller.response.SearchResponse
 import com.library.service.BookQueryService
 import org.spockframework.spring.SpringBean
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.MediaType
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import spock.lang.Specification
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
@@ -76,7 +76,7 @@ class BookControllerItTest extends Specification {
 
         then:
         result.andExpect(status().isBadRequest())
-                .andExpect(jsonPath('$.errorMessage').value("페이지번호는 1 이상이어야 합니다."))
+                .andExpect(jsonPath('$.errorMessage').value("페이지번호는 1이상이어야 합니다."))
     }
 
     def "size가 50을 초과하면 BadRequest 응답반환된다."() {
@@ -91,6 +91,6 @@ class BookControllerItTest extends Specification {
 
         then:
         result.andExpect(status().isBadRequest())
-                .andExpect(jsonPath('$.errorMessage').value("페이지 사이즈는 최대 50 입니다."))
+                .andExpect(jsonPath('$.errorMessage').value("페이지크기는 50이하여야 합니다."))
     }
 }
