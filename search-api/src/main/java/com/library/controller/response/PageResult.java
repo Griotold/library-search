@@ -15,4 +15,7 @@ public record PageResult<T>(
         @Schema(description = "본문")
         List<T> contents) {
 
+    public boolean hasContents() {
+        return !contents.isEmpty();
+    }
 }
