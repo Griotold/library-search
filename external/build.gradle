@@ -1,1 +1,10 @@
 jar.enabled = true
+
+// naver, kakao 모두 openFeign을 사용하므로 external에다가 서렂ㅇ
+subprojects {
+    jar.enabled = true
+    dependencies {
+        implementation project(':common')
+        api 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    }
+}

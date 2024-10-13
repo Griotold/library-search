@@ -2,6 +2,7 @@ package com.library.repository
 
 
 import com.library.entity.DailyStat
+import com.library.feign.KakaoClient
 import com.library.feign.NaverClient
 import jakarta.persistence.EntityManager
 import org.spockframework.spring.SpringBean
@@ -27,6 +28,9 @@ class DailyStatRepositoryTest extends Specification {
     // 외부 시스템과 통신을 대체하고 싶을 때 사용
     @SpringBean
     NaverClient naverClient = Mock()
+
+    @SpringBean
+    KakaoClient kakaoClient = Mock()
 
     def "저장 후 조회가 된다."() {
         given:
